@@ -127,3 +127,5 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+UNIT/models/vgg16.t7
+UNIT/models/vgg16.weight
