@@ -3,6 +3,7 @@ Copyright (C) 2018 NVIDIA Corporation.  All rights reserved.
 Licensed under the CC BY-NC-SA 4.0 license (https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode).
 """
 from torch.utils.serialization import load_lua
+import torchfile
 from torch.utils.data import DataLoader
 from networks import Vgg16
 from torch.autograd import Variable
@@ -47,6 +48,7 @@ def get_all_data_loaders(conf):
     height = conf['crop_image_height']
     width = conf['crop_image_width']
 
+    # if using a local data root folder
     if 'data_root' in conf:
         train_loader_a = get_data_loader_folder(os.path.join(conf['data_root'], 'trainA'), batch_size, True,
                                               new_size_a, height, width, num_workers, True)
@@ -97,7 +99,7 @@ def get_data_loader_folder(input_folder, batch_size, train, new_size=None,
 
 def get_config(config):
     with open(config, 'r') as stream:
-        return yaml.load(stream)
+        return yaml.safe_load(stream)
 
 
 def eformat(f, prec):
@@ -223,7 +225,8 @@ def load_vgg16(model_dir):
     if not os.path.exists(os.path.join(model_dir, 'vgg16.weight')):
         if not os.path.exists(os.path.join(model_dir, 'vgg16.t7')):
             os.system('wget https://www.dropbox.com/s/76l3rt4kyi3s8x7/vgg16.t7?dl=1 -O ' + os.path.join(model_dir, 'vgg16.t7'))
-        vgglua = load_lua(os.path.join(model_dir, 'vgg16.t7'))
+        # vgglua = load_lua(os.path.join(model_dir, 'vgg16.t7'))
+        vgglua = torchfile.load(os.path.join(model_dir, 'vgg16.t7'))
         vgg = Vgg16()
         for (src, dst) in zip(vgglua.parameters()[0], vgg.parameters()):
             dst.data[:] = src
