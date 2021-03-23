@@ -127,7 +127,13 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# UNIT ignore
 UNIT/models/vgg16.t7
 UNIT/models/vgg16.weight
 *.xml
 *.iml
+UNIT/datasets/summer2winter_yosemite_all/
+*.local
+UNIT/.DS_Store
+UNIT/outputs/

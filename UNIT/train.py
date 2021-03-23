@@ -2,10 +2,10 @@
 Copyright (C) 2018 NVIDIA Corporation.  All rights reserved.
 Licensed under the CC BY-NC-SA 4.0 license (https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode).
 """
-from UNIT.utils import get_all_data_loaders, prepare_sub_folder, write_html, write_loss, get_config, write_2images, Timer
+from utils import get_all_data_loaders, prepare_sub_folder, write_html, write_loss, get_config, write_2images, Timer
 import argparse
 # from torch.autograd import Variable
-from UNIT.trainer import MUNIT_Trainer, UNIT_Trainer
+from trainer import MUNIT_Trainer, UNIT_Trainer
 import torch.backends.cudnn as cudnn
 import torch
 try:
@@ -94,6 +94,7 @@ while True:
             # HTML
             write_html(output_directory + "/index.html", iterations + 1, config['image_save_iter'], 'images')
 
+        # displaying images
         if (iterations + 1) % config['image_display_iter'] == 0:
             with torch.no_grad():
                 image_outputs = trainer.sample(train_display_images_a, train_display_images_b)
