@@ -133,9 +133,7 @@ UNIT/models/vgg16.t7
 UNIT/models/vgg16.weight
 *.xml
 *.iml
-UNIT/datasets/summer2winter_yosemite/
-UNIT/datasets/summer2winter_yosemite_local/
-UNIT/datasets/monet2photo/
+UNIT/datasets/*
 UNIT/logs/
 *.local
 UNIT/.DS_Store
