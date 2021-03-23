@@ -134,6 +134,16 @@ UNIT/models/vgg16.weight
 *.xml
 *.iml
 UNIT/datasets/summer2winter_yosemite_all/
+UNIT/datasets/summer2winter_yosemite_local/
 *.local
 UNIT/.DS_Store
-UNIT/outputs/
+UNIT/outputs/*
+UNIT/*/.DS_Store
+UNIT/logs/.DS_Store
+UNIT/datasets/summer2winter_yosemite/trainB/.DS_Store
+UNIT/datasets/summer2winter_yosemite/trainA/.DS_Store
+UNIT/datasets/summer2winter_yosemite/testA/.DS_Store
+UNIT/datasets/summer2winter_yosemite/.DS_Store
+UNIT/datasets/gta2city/.DS_Store
+UNIT/datasets/.DS_Store
+UNIT/.DS_Store
