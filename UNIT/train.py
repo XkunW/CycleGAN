@@ -2,11 +2,12 @@
 Copyright (C) 2018 NVIDIA Corporation.  All rights reserved.
 Licensed under the CC BY-NC-SA 4.0 license (https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode).
 """
-from utils import get_all_data_loaders, prepare_sub_folder, write_html, write_loss, get_config, write_2images, Timer
+from utils import get_all_data_loaders, prepare_sub_folder, write_html, write_loss, get_config, write_2images#, Timer
 import argparse
 # from torch.autograd import Variable
 from trainer import MUNIT_Trainer, UNIT_Trainer
 import torch.backends.cudnn as cudnn
+from tqdm import tqdm
 import torch
 try:
     from itertools import izip as zip
@@ -65,19 +66,19 @@ shutil.copy(opts.config, os.path.join(output_directory, 'config.yaml')) # copy c
 # Start training
 iterations = trainer.resume(checkpoint_directory, hyperparameters=config) if opts.resume else 0
 while True:
-    for it, (images_a, images_b) in enumerate(zip(train_loader_a, train_loader_b)):
+    for it, (images_a, images_b) in enumerate(tqdm(zip(train_loader_a, train_loader_b))):
         trainer.update_learning_rate()
         if torch.cuda.is_available():
             images_a, images_b = images_a.cuda().detach(), images_b.cuda().detach()
         else:
             images_a, images_b = images_a.detach(), images_b.detach()
 
-        with Timer("Elapsed time in update: %f"):
-            # Main training code
-            trainer.dis_update(images_a, images_b, config)
-            trainer.gen_update(images_a, images_b, config)
-            if torch.cuda.is_available():
-                torch.cuda.synchronize()
+        #with Timer("Elapsed time in update: %f"):
+        # Main training code
+        trainer.dis_update(images_a, images_b, config)
+        trainer.gen_update(images_a, images_b, config)
+        if torch.cuda.is_available():
+            torch.cuda.synchronize()
 
         # Dump training stats in log file
         if (iterations + 1) % config['log_iter'] == 0:
