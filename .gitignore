@@ -147,3 +147,6 @@ UNIT/datasets/summer2winter_yosemite/.DS_Store
 UNIT/datasets/gta2city/.DS_Store
 UNIT/datasets/.DS_Store
 UNIT/.DS_Store
+
+# MacOS generated files
+.DS_Store
