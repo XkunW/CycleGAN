@@ -150,3 +150,6 @@ UNIT/.DS_Store
 
 # MacOS generated files
 .DS_Store
+
+# CycleGAN checkpoints
+checkpoints/
