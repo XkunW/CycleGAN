@@ -106,6 +106,9 @@ class BaseOptions():
         """Parse our options, create checkpoints directory suffix, and set up gpu device."""
         opt = self.gather_options()
         opt.isTrain = self.isTrain   # train or test
+        if opt.colab:
+            os.chdir('Image_Translation/CycleGAN')
+            print(os.getcwd())         # check if dir is changed to the correct location
 
         # process opt.suffix
         if opt.suffix:
