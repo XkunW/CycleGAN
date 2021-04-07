@@ -5,7 +5,7 @@ Licensed under the CC BY-NC-SA 4.0 license (https://creativecommons.org/licenses
 from utils import get_all_data_loaders, prepare_sub_folder, write_html, write_loss, get_config, write_2images#, Timer
 import argparse
 # from torch.autograd import Variable
-from trainer import MUNIT_Trainer, UNIT_Trainer
+from trainer import UNIT_Trainer
 import torch.backends.cudnn as cudnn
 from tqdm import tqdm
 import torch
@@ -22,7 +22,7 @@ parser = argparse.ArgumentParser()
 parser.add_argument('--config', type=str, default='configs/edges2handbags_folder.yaml', help='Path to the config file.')
 parser.add_argument('--output_path', type=str, default='.', help="outputs path")
 parser.add_argument("--resume", action="store_true")
-parser.add_argument('--trainer', type=str, default='MUNIT', help="MUNIT|UNIT")
+parser.add_argument('--trainer', type=str, default='UNIT', help="UNIT")
 opts = parser.parse_args()
 
 cudnn.benchmark = True
@@ -34,12 +34,7 @@ display_size = config['display_size']
 config['vgg_model_path'] = opts.output_path
 
 # Setup model and data loader
-if opts.trainer == 'MUNIT':
-    trainer = MUNIT_Trainer(config)
-elif opts.trainer == 'UNIT':
-    trainer = UNIT_Trainer(config)
-else:
-    sys.exit("Only support MUNIT|UNIT")
+trainer = UNIT_Trainer(config)
 
 if torch.cuda.is_available():
     trainer.cuda()
@@ -108,4 +103,3 @@ while True:
         iterations += 1
         if iterations >= max_iter:
             sys.exit('Finish training')
-
