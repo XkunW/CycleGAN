@@ -4,7 +4,7 @@ Licensed under the CC BY-NC-SA 4.0 license (https://creativecommons.org/licenses
 """
 from __future__ import print_function
 from UNIT.utils import get_config, pytorch03_to_pytorch04
-from UNIT.trainer import MUNIT_Trainer, UNIT_Trainer
+from UNIT.trainer import UNIT_Trainer
 import argparse
 from torch.autograd import Variable
 import torchvision.utils as vutils
@@ -26,7 +26,7 @@ parser.add_argument('--num_style',type=int, default=10, help="number of styles t
 parser.add_argument('--synchronized', action='store_true', help="whether use synchronized style code or not")
 parser.add_argument('--output_only', action='store_true', help="whether use synchronized style code or not")
 parser.add_argument('--output_path', type=str, default='.', help="path for logs, checkpoints, and VGG model weight")
-parser.add_argument('--trainer', type=str, default='MUNIT', help="MUNIT|UNIT")
+parser.add_argument('--trainer', type=str, default='UNIT', help="UNIT")
 opts = parser.parse_args()
 
 
@@ -42,13 +42,7 @@ opts.num_style = 1 if opts.style != '' else opts.num_style
 
 # Setup model and data loader
 config['vgg_model_path'] = opts.output_path
-if opts.trainer == 'MUNIT':
-    style_dim = config['gen']['style_dim']
-    trainer = MUNIT_Trainer(config)
-elif opts.trainer == 'UNIT':
-    trainer = UNIT_Trainer(config)
-else:
-    sys.exit("Only support MUNIT|UNIT")
+trainer = UNIT_Trainer(config)
 
 try:
     state_dict = torch.load(opts.checkpoint)
@@ -83,27 +77,11 @@ with torch.no_grad():
     # Start testing
     content, _ = encode(image)
 
-    if opts.trainer == 'MUNIT':
-        style_rand = Variable(torch.randn(opts.num_style, style_dim, 1, 1))#.cuda())
-        if opts.style != '':
-            _, style = style_encode(style_image)
-        else:
-            style = style_rand
-        for j in range(opts.num_style):
-            s = style[j].unsqueeze(0)
-            outputs = decode(content, s)
-            outputs = (outputs + 1) / 2.
-            path = os.path.join(opts.output_folder, 'output{:03d}.jpg'.format(j))
-            vutils.save_image(outputs.data, path, padding=0, normalize=True)
-    elif opts.trainer == 'UNIT':
-        outputs = decode(content)
-        outputs = (outputs + 1) / 2.
-        path = os.path.join(opts.output_folder, 'output.jpg')
-        vutils.save_image(outputs.data, path, padding=0, normalize=True)
-    else:
-        pass
+    outputs = decode(content)
+    outputs = (outputs + 1) / 2.
+    path = os.path.join(opts.output_folder, 'output.jpg')
+    vutils.save_image(outputs.data, path, padding=0, normalize=True)
 
     if not opts.output_only:
         # also save input images
         vutils.save_image(image.data, os.path.join(opts.output_folder, 'input.jpg'), padding=0, normalize=True)
-
