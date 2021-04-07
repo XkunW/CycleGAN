@@ -152,4 +152,4 @@ UNIT/.DS_Store
 .DS_Store
 
 # CycleGAN checkpoints
-checkpoints/
+CycleGAN/checkpoints/
