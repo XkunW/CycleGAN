@@ -140,6 +140,8 @@ def create_log_txt(opt):
     with open(log_name, "a") as log_file:
         now = time.strftime("%c")
         log_file.write('================ Training Loss (%s) ================\n' % now)
+    if not os.path.exists(log_file):
+        raise Exception("Training log was not created properly!")
     return log_name
 
 def print_current_losses(log_name, epoch, iters, losses, t_comp, t_data):
