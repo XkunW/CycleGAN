@@ -26,11 +26,12 @@ See options/base_options.py and options/test_options.py for more test options.
 See training and test tips at: https://github.com/junyanz/pytorch-CycleGAN-and-pix2pix/blob/master/docs/tips.md
 See frequently asked questions at: https://github.com/junyanz/pytorch-CycleGAN-and-pix2pix/blob/master/docs/qa.md
 """
+from CycleGAN.util.util import mkdirs
 import os
 from options.test_options import TestOptions
 from data import create_dataset
 from models.cycle_gan_model import CycleGANModel
-from util.util import save_images
+from util.util import save_images, make_image_dirs
 from util import html
 
 
@@ -50,6 +51,7 @@ if __name__ == '__main__':
         web_dir = '{:s}_iter{:d}'.format(web_dir, opt.load_iter)
     print('creating web directory', web_dir)
     webpage = html.HTML(web_dir, 'Experiment = %s, Phase = %s, Epoch = %s' % (opt.name, opt.phase, opt.epoch))
+    make_image_dirs(webpage)
     # test with eval mode. This only affects layers like batchnorm and dropout.
     # For [CycleGAN]: It should not affect CycleGAN as CycleGAN uses instancenorm without dropout.
     if opt.eval:

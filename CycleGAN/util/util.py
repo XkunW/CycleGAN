@@ -105,6 +105,13 @@ def mkdir(path):
         os.makedirs(path)
 
 
+def make_image_dirs(webpage):
+    image_dir = webpage.get_image_dir()
+    dir_names = ["fake_A", "fake_B", "real_A", "real_B", "rec_A", "rec_B"]
+    dir_names = [os.path.join(image_dir, dir_name) for dir_name in dir_names]
+    mkdirs(dir_names)
+
+
 def save_images(webpage, visuals, image_path, aspect_ratio=1.0, width=256):
     """Save images to the disk.
 
@@ -136,10 +143,10 @@ def save_images(webpage, visuals, image_path, aspect_ratio=1.0, width=256):
 
 
 def get_save_path(image_dir, image_name):
-    suffix = image_name[-9:-4]
-    possible_suffixes = ["ake_A", "ake_B", "eal_A", "eal_B", "rec_A", "rec_B"]
+    suffix = image_name[-10:-4]
+    possible_suffixes = ["fake_A", "fake_B", "real_A", "real_B", "_rec_A", "_rec_B"]
     index = possible_suffixes.index(suffix)
-    return os.path.join(image_dir, possible_suffixes[index], image_name)
+    return os.path.join(image_dir, possible_suffixes[index].lstrip("_"), image_name)
 
 
 def create_log_txt(opt):
