@@ -182,11 +182,11 @@ class UNIT_Trainer(nn.Module):
         print('Resume from iteration %d' % iterations)
         return iterations
 
-    def save(self, snapshot_dir, iterations):
+    def save(self, snapshot_dir, iterations, param_values):
         # Save generators, discriminators, and optimizers
-        gen_name = os.path.join(snapshot_dir, 'gen_%08d.pt' % (iterations + 1))
-        dis_name = os.path.join(snapshot_dir, 'dis_%08d.pt' % (iterations + 1))
-        opt_name = os.path.join(snapshot_dir, 'optimizer.pt')
+        gen_name = os.path.join(snapshot_dir, 'gen_%08d_%s.pt' % (iterations + 1, param_values))
+        dis_name = os.path.join(snapshot_dir, 'dis_%08d_%s.pt' % (iterations + 1, param_values))
+        opt_name = os.path.join(snapshot_dir, 'optimizer_%s.pt' % (param_values))
         torch.save({'a': self.gen_a.state_dict(), 'b': self.gen_b.state_dict()}, gen_name)
         torch.save({'a': self.dis_a.state_dict(), 'b': self.dis_b.state_dict()}, dis_name)
         torch.save({'gen': self.gen_opt.state_dict(), 'dis': self.dis_opt.state_dict()}, opt_name)

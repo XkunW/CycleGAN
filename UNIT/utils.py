@@ -128,7 +128,7 @@ def write_one_row_html(html_file, iterations, img_filename, all_size):
     return
 
 
-def write_html(filename, iterations, image_save_iterations, image_directory, all_size=1536):
+def write_html(filename, iterations, image_save_iterations, image_directory, param_values, all_size=1536):
     html_file = open(filename, "w")
     html_file.write('''
     <!DOCTYPE html>
@@ -140,14 +140,14 @@ def write_html(filename, iterations, image_save_iterations, image_directory, all
     <body>
     ''' % os.path.basename(filename))
     html_file.write("<h3>current</h3>")
-    write_one_row_html(html_file, iterations, '%s/gen_a2b_train_current.jpg' % (image_directory), all_size)
-    write_one_row_html(html_file, iterations, '%s/gen_b2a_train_current.jpg' % (image_directory), all_size)
+    write_one_row_html(html_file, iterations, '%s/gen_a2b_train_current_%s.jpg' % (image_directory, param_values), all_size)
+    write_one_row_html(html_file, iterations, '%s/gen_b2a_train_current_%s.jpg' % (image_directory, param_values), all_size)
     for j in range(iterations, image_save_iterations-1, -1):
         if j % image_save_iterations == 0:
-            write_one_row_html(html_file, j, '%s/gen_a2b_test_%08d.jpg' % (image_directory, j), all_size)
-            write_one_row_html(html_file, j, '%s/gen_b2a_test_%08d.jpg' % (image_directory, j), all_size)
-            write_one_row_html(html_file, j, '%s/gen_a2b_train_%08d.jpg' % (image_directory, j), all_size)
-            write_one_row_html(html_file, j, '%s/gen_b2a_train_%08d.jpg' % (image_directory, j), all_size)
+            write_one_row_html(html_file, j, '%s/gen_a2b_test_%08d_%s.jpg' % (image_directory, j, param_values), all_size)
+            write_one_row_html(html_file, j, '%s/gen_b2a_test_%08d_%s.jpg' % (image_directory, j, param_values), all_size)
+            write_one_row_html(html_file, j, '%s/gen_a2b_train_%08d_%s.jpg' % (image_directory, j, param_values), all_size)
+            write_one_row_html(html_file, j, '%s/gen_b2a_train_%08d_%s.jpg' % (image_directory, j, param_values), all_size)
     html_file.write("</body></html>")
     html_file.close()
 
