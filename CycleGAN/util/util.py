@@ -136,7 +136,7 @@ def save_images(webpage, visuals, image_path, aspect_ratio=1.0, width=256):
 
 
 def get_save_path(image_dir, image_name):
-    suffix = image_name[-5:]
+    suffix = image_name[-9:-4]
     possible_suffixes = ["ake_A", "ake_B", "eal_A", "eal_B", "rec_A", "rec_B"]
     index = possible_suffixes.index(suffix)
     return os.path.join(image_dir, possible_suffixes[index], image_name)
