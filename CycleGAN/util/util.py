@@ -127,7 +127,7 @@ def save_images(webpage, visuals, image_path, aspect_ratio=1.0, width=256):
     for label, im_data in visuals.items():
         im = tensor2im(im_data)
         image_name = '%s_%s.png' % (name, label)
-        save_path = os.path.join(image_dir, image_name)
+        save_path = get_save_path(image_dir, image_name)
         save_image(im, save_path, aspect_ratio=aspect_ratio)
         ims.append(image_name)
         txts.append(label)
@@ -135,11 +135,20 @@ def save_images(webpage, visuals, image_path, aspect_ratio=1.0, width=256):
     webpage.add_images(ims, txts, links, width=width)
 
 
+def get_save_path(image_dir, image_name):
+    suffix = image_name[-9:-4]
+    possible_suffixes = ["ake_A", "ake_B", "eal_A", "eal_B", "rec_A", "rec_B"]
+    index = possible_suffixes.index(suffix)
+    return os.path.join(image_dir, possible_suffixes[index], image_name)
+
+
 def create_log_txt(opt):
     log_name = os.path.join(opt.checkpoints_dir, opt.name, 'loss_log.txt')
     with open(log_name, "a") as log_file:
         now = time.strftime("%c")
         log_file.write('================ Training Loss (%s) ================\n' % now)
+    if not os.path.exists(log_name):
+        raise Exception("Training log was not created properly!")
     return log_name
 
 def print_current_losses(log_name, epoch, iters, losses, t_comp, t_data):

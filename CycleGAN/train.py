@@ -19,7 +19,6 @@ See training and test tips at: https://github.com/junyanz/pytorch-CycleGAN-and-p
 See frequently asked questions at: https://github.com/junyanz/pytorch-CycleGAN-and-pix2pix/blob/master/docs/qa.md
 """
 import time
-import os
 from options.train_options import TrainOptions
 from data import create_dataset
 from models.cycle_gan_model import CycleGANModel
@@ -27,9 +26,6 @@ from util.util import create_log_txt, print_current_losses
 
 if __name__ == '__main__':
     opt = TrainOptions().parse()   # get training options
-    if opt.colab:
-        os.chdir('Image_Translation/CycleGAN')
-        print(os.getcwd())         # check if dir is changed to the correct location
     dataset = create_dataset(opt)  # create a dataset given opt.dataset_mode and other options
     dataset_size = len(dataset)    # get the number of images in the dataset.
 
