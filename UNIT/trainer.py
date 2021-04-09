@@ -163,12 +163,14 @@ class UNIT_Trainer(nn.Module):
     def resume(self, checkpoint_dir, hyperparameters):
         # Load generators
         last_model_name = get_model_list(checkpoint_dir, "gen")
+        print('resume from generator checkpoint named:', last_model_name)
         state_dict = torch.load(last_model_name)
         self.gen_a.load_state_dict(state_dict['a'])
         self.gen_b.load_state_dict(state_dict['b'])
         iterations = int(last_model_name[4:11])
         # Load discriminators
         last_model_name = get_model_list(checkpoint_dir, "dis")
+        print('resume from discriminator checkpoint named:', last_model_name)
         state_dict = torch.load(last_model_name)
         self.dis_a.load_state_dict(state_dict['a'])
         self.dis_b.load_state_dict(state_dict['b'])
