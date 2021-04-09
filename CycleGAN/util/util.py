@@ -48,7 +48,7 @@ def diagnose_network(net, name='network'):
     print(mean)
 
 
-def save_image(image_numpy, image_path, aspect_ratio=1.0):
+def save_image(opt, image_numpy, image_path, aspect_ratio=1.0):
     """Save a numpy image to the disk
 
     Parameters:
@@ -56,6 +56,8 @@ def save_image(image_numpy, image_path, aspect_ratio=1.0):
         image_path (str)          -- the path of the image
     """
 
+    if opt.colab:
+        os.chdir("/content/drive/MyDrive")
     image_pil = Image.fromarray(image_numpy)
     h, w, _ = image_numpy.shape
 
@@ -64,6 +66,8 @@ def save_image(image_numpy, image_path, aspect_ratio=1.0):
     if aspect_ratio < 1.0:
         image_pil = image_pil.resize((int(h / aspect_ratio), w), Image.BICUBIC)
     image_pil.save(image_path)
+    if opt.colab:
+        os.chdir("/content/Image_Translation/CycleGAN")
 
 
 def print_numpy(x, val=True, shp=False):
@@ -105,14 +109,24 @@ def mkdir(path):
         os.makedirs(path)
 
 
-def make_image_dirs(webpage):
-    image_dir = webpage.get_image_dir()
+def create_results_dir(opt):
+    if opt.colab:
+        os.chdir("/content/drive/MyDrive")
+    image_dir = os.path.join(opt.results_dir, opt.name)
+    mkdir(image_dir)
+    make_image_dirs(image_dir)
+    if opt.colab:
+        os.chdir("/content/Image_Translation/CycleGAN")
+    return image_dir
+
+
+def make_image_dirs(image_dir):
     dir_names = ["fake_A", "fake_B", "real_A", "real_B", "rec_A", "rec_B"]
     dir_names = [os.path.join(image_dir, dir_name) for dir_name in dir_names]
     mkdirs(dir_names)
 
 
-def save_images(webpage, visuals, image_path, aspect_ratio=1.0, width=256):
+def save_images(opt, image_dir, visuals, image_path, aspect_ratio=1.0, width=256):
     """Save images to the disk.
 
     Parameters:
@@ -124,22 +138,14 @@ def save_images(webpage, visuals, image_path, aspect_ratio=1.0, width=256):
 
     This function will save images stored in 'visuals' to the HTML file specified by 'webpage'.
     """
-    image_dir = webpage.get_image_dir()
     short_path = ntpath.basename(image_path[0])
     name = os.path.splitext(short_path)[0]
-
-    webpage.add_header(name)
-    ims, txts, links = [], [], []
 
     for label, im_data in visuals.items():
         im = tensor2im(im_data)
         image_name = '%s_%s.png' % (name, label)
         save_path = get_save_path(image_dir, image_name)
-        save_image(im, save_path, aspect_ratio=aspect_ratio)
-        ims.append(image_name)
-        txts.append(label)
-        links.append(image_name)
-    webpage.add_images(ims, txts, links, width=width)
+        save_image(opt, im, save_path, aspect_ratio=aspect_ratio)
 
 
 def get_save_path(image_dir, image_name):
