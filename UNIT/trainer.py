@@ -187,6 +187,25 @@ class UNIT_Trainer(nn.Module):
         print('Resume from iteration %d' % iterations)
         return iterations
 
+    def resume(self, gen_dir, dis_dir, opt_dir, iterations, hyperparameters):
+        # Load generators
+        state_dict = torch.load(gen_dir)
+        self.gen_a.load_state_dict(state_dict['a'])
+        self.gen_b.load_state_dict(state_dict['b'])
+        print('hi')
+        # Load discriminators
+        state_dict = torch.load(dis_dir)
+        self.dis_a.load_state_dict(state_dict['a'])
+        self.dis_b.load_state_dict(state_dict['b'])
+        # Load optimizers
+        state_dict = torch.load(opt_dir)
+        self.dis_opt.load_state_dict(state_dict['dis'])
+        self.gen_opt.load_state_dict(state_dict['gen'])
+        # Reinitilize schedulers
+        self.dis_scheduler = get_scheduler(self.dis_opt, hyperparameters, iterations)
+        self.gen_scheduler = get_scheduler(self.gen_opt, hyperparameters, iterations)
+        print('Resume from iteration %d' % iterations)
+
     def save(self, snapshot_dir, iterations, param_values):
         # Save generators, discriminators, and optimizers
         gen_name = os.path.join(snapshot_dir, 'gen_%08d_%s.pt' % (iterations + 1, param_values))
