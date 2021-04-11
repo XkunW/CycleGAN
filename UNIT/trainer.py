@@ -160,7 +160,7 @@ class UNIT_Trainer(nn.Module):
         if self.gen_scheduler is not None:
             self.gen_scheduler.step()
 
-    def resume(self, checkpoint_dir, hyperparameters):
+    def resume_prev(self, checkpoint_dir, hyperparameters):
         # Load generators
         last_model_name = get_model_list(checkpoint_dir, "gen")
         print('resume from generator checkpoint named:', last_model_name)
