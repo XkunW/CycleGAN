@@ -53,4 +53,5 @@ new_size_a: 512                             # first resize the shortest image si
 new_size_b: 512                             # first resize the shortest image side to this size
 crop_image_height: 512                      # random crop image of this height
 crop_image_width: 512                       # random crop image of this width
+
 data_root: ./datasets/summer2winter_yosemite     # dataset folder location  /summer2winter_yosemite256
